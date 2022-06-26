@@ -1,5 +1,5 @@
 # Vasicek One-Factor
-
+Vasicek one factor model for simulating the evolution of a credit instrument such as a government bond.
 
 ## Problem
 When trying to simulate the credit market, there is a rich body of developed models. The choice of the model and its limitations are a key decision. 
