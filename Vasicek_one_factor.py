@@ -2,14 +2,13 @@ import numpy as np
 import pandas as pd
 from typing import Any
 
-# This method generates a Weiner process (more commonly known as a Brownian Motion)
-def generate_weiner_process(x0: float = 1, T: int = 1, dt: float = 0.001, rho: float = None) -> Any:
+def generate_weiner_process(x0: float= 1, T: int = 1, dt: float = 0.001, rho: float = None) -> Any:
     # GENERATE_WEINER_PROCESS calculates the sample paths of a one-dimensional Brownian motion or a two-dimensional Brownian motion with a correlation coefficient of rho.
     # The function's output are two sample paths (realisations) of such a process, recorded on increments specified by dt. 
-    # W = generate_weiner_process(self, T, dt, rho)
+    # W = generate_weiner_process(x0, T, dt, rho)
     #
     # Arguments:   
-    #   x0   = float, specifies the starting value of the Brownian motion
+    #   x0   =  float, the starting value of the Brownian motion
     #   T    = integer, specifying the maximum modeling time. ex. if T = 2 then modelling time will run from 0 to 2
     #   dt   = float, specifying the length of each subinterval. ex. dt=10, then there will be 10 intervals of length 0.1 between two integers of modeling time 
     #   rho  = float, specifying the correlation coefficient of the Brownian motion. ex. rho = 0.4 means that two 
@@ -65,32 +64,53 @@ def generate_weiner_process(x0: float = 1, T: int = 1, dt: float = 0.001, rho: f
 
         return [W_1, W_2]
 
-# This simulates a temporal series of interest rates using the One Factor Vasicek mean reverting model and the generated Weiner process
 def simulate_Vasicek_One_Factor(x0: float = 1, r0: float = 0.1, a: float = 1.0, b: float = 0.1, sigma: float = 0.2, T: int = 52, dt = 0.1) -> pd.DataFrame:
-    # SIMULATE_VASICEK_ONE_FACTOR simulates a temporal series of interest rates using the One Factor Vasicek mean reverting model and the generated Weiner process
-    #
-    # interest_rate_simulation = simulate_Vasicek_One_Factor(self, r0, a, b, sigma, T, dt)
+    # SIMULATE_VASICEK_ONE_FACTOR simulates a temporal series of interest rates using the One Factor Vasicek model
+    # interest_rate_simulation = simulate_Vasicek_One_Factor(x0, r0, a, b, sigma, T, dt)
     #
     # Arguments:
-    #   x0   = float, specifies the starting value of the Brownian motion
+    #   x0    = float, specifies the starting value of the Brownian motion
     #   r0    = float, starting interest rate of the vasicek process 
-    #   a     = float, speed of reversion" parameter thatcharacterizes the velocity at which such trajectories will regroup around b in time
+    #   a     = float, speed of reversion" parameter that characterizes the velocity at which such trajectories will regroup around b in time
     #   b     = float, long term mean level. All future trajectories of  r will evolve around a mean level b in the long run  
     #   sigma = float, instantaneous volatility measures instant by instant the amplitude of randomness entering the system
     #   T     = integer, end modelling time. From 0 to T the time series runs. 
     #   dt    = float, increment of time that the proces runs on. Ex. dt = 0.1 then the time series is 0, 0.1, 0.2,...
     #
     # Returns:
-    #   interest_rate_simulation = pandas dataframe contains the simulated interest rate process
+    #   interest_rate_simulation = N x 2 pandas DataFrame where index is modeling time and values are a realisation of the uderlying's price
     #
     # Example:
+    #   Model the interest rate which is 10% today. The annualized instant volatility is 20%. The external analysis points out that the mean reversion parameter is 1 and the long term interest rate level is 10% The user is interested in an interest rate projection of the next 10 years in increments of 6 months (0.5 years)
+    #
     #   import pandas as pd
     #   import numpy as np
-    #   <ToFinish>simulate_Vasicek_One_Factor(0.1, 1.0, 0.1,0.2,52,0.1)   
-    #   [out] =  pd array    
+    #
+    #   simulate_Vasicek_One_Factor(1,0.1, 1.0,0.1,0.2,10,0.5)   
+    #   [out] = Time    Stock Price                
+    #           0.000000        0.100000
+    #           0.526316        0.147296
+    #           1.052632        0.156119
+    #           1.578947        0.292903
+    #           2.105263        0.291621
+    #           2.631579        0.199320
+    #           3.157895        0.149609
+    #           3.684211        0.158028
+    #           4.210526        0.262529
+    #           4.736842        0.256974
+    #           5.263158        0.161881
+    #           5.789474        0.017671
+    #           6.315789       -0.152944
+    #           6.842105       -0.224443
+    #           7.368421       -0.057381
+    #           7.894737       -0.113432
+    #           8.421053        0.130159
+    #           8.947368        0.093998
+    #           9.473684        0.245016
+    #           10.000000       0.142039
     # For more information see SOURCE
     
-    N = int(T / dt)
+    N = int(T / dt) # number of subintervals of length 1/dt between 0 and max modeling time T
 
     time, delta_t = np.linspace(0, T, num = N, retstep = True)
 
@@ -107,7 +127,3 @@ def simulate_Vasicek_One_Factor(x0: float = 1, r0: float = 0.1, a: float = 1.0, 
     interest_rate_simulation.set_index('Time', inplace = True)
 
     return interest_rate_simulation
-
-
-
-print(simulate_Vasicek_One_Factor(1,  0.1,  1.0, 0.1,  0.2,  52, 0.1))
