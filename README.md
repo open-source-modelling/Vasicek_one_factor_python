@@ -2,13 +2,13 @@
 
 
 ## Problem
+When trying to simulate the credit market, there is a rich body of developed models. The choice of the model and its limitations are a key decision. 
 
 ## Solution
-
+One of the simplest short rate models, the [Vasicek one factor model](https://en.wikipedia.org/wiki/Vasicek_model) assumes that the credit market can be described by a simple mean reverting stochastic process with one source of uncertainty comming from a [Brownian motion](https://en.wikipedia.org/wiki/Brownian_motion). 
 ### Input
 
 ### Output
-
 
 ## Getting started
 ```python
