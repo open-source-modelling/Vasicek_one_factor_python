@@ -15,7 +15,7 @@ def generate_weiner_process(T: int = 1, dt: float = 0.001, rho: float = None) ->
     #
     # Returns:
     #   W =  N x 1 or N x 2 ndarray, where N is the number of subintervals, and the second dimension is eiter 1 or 2 depending if the function is called 
-    #        to generate a one or two dimensional Brownian motion. Each column represents a sample path of a Brownian motion starting at x0 
+    #        to generate a one or two dimensional Brownian motion. Each column represents a sample path of a Brownian motion
     #
     # Example:
     # The user wants to generate discreete sample paths of two Brownian motions with a correlation coefficient of 0.4. 
@@ -30,7 +30,6 @@ def generate_weiner_process(T: int = 1, dt: float = 0.001, rho: float = None) ->
     #           -0.61179385])]
     #       
     # Ideas for improvement:
-    # Remove x0 as a necessary argument
     # Generate increments directly
     # 
     # For more information see https://en.wikipedia.org/wiki/Brownian_motion
@@ -54,8 +53,8 @@ def generate_weiner_process(T: int = 1, dt: float = 0.001, rho: float = None) ->
 
         for iter in range(1, N): # generate two independent BMs and entangle them with the formula from SOURCE
 
-            Z1 = np.random.normal(scale = dt)
-            Z2 = np.random.normal(scale = dt)
+            Z1 = np.random.normal(scale = np.sqrt(dt))
+            Z2 = np.random.normal(scale = np.sqrt(dt))
             Z3 = rho * Z1 + np.sqrt(1 - rho**2) * Z2
 
             W_1[iter] = W_1[iter-1] + Z1 # Generate first BM
@@ -65,7 +64,7 @@ def generate_weiner_process(T: int = 1, dt: float = 0.001, rho: float = None) ->
 
 def simulate_Vasicek_One_Factor(r0: float = 0.1, a: float = 1.0, b: float = 0.1, sigma: float = 0.2, T: int = 52, dt = 0.1) -> pd.DataFrame:
     # SIMULATE_VASICEK_ONE_FACTOR simulates a temporal series of interest rates using the One Factor Vasicek model
-    # interest_rate_simulation = simulate_Vasicek_One_Factor(x0, r0, a, b, sigma, T, dt)
+    # interest_rate_simulation = simulate_Vasicek_One_Factor(r0, a, b, sigma, T, dt)
     #
     # Arguments:
     #   r0    = float, starting interest rate of the vasicek process 
